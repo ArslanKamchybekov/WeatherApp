@@ -4,12 +4,15 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,21 +26,29 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import kg.geektech.weatherapp.R;
 import kg.geektech.weatherapp.common.Resource;
 import kg.geektech.weatherapp.data.models.Weather;
 import kg.geektech.weatherapp.databinding.FragmentWeatherBinding;
-
+@AndroidEntryPoint
 public class WeatherFragment extends Fragment {
 
     private FragmentWeatherBinding binding;
     private WeatherViewModel viewModel;
+    private NavHostFragment navHostFragment;
+    private NavController navController;
+    private WeatherFragmentArgs args;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(WeatherViewModel.class);
-        viewModel.getWeathers();
+        args = WeatherFragmentArgs.fromBundle(getArguments());
+        String city = args.getCity();
+        viewModel.getWeathers(city);
+        navHostFragment  = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navController = navHostFragment.getNavController();
     }
 
     @Override
@@ -51,6 +62,7 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initListeners();
         viewModel.liveData.observe(getViewLifecycleOwner(), resource -> {
             switch (resource.status){
                 case SUCCESS:{
@@ -104,6 +116,14 @@ public class WeatherFragment extends Fragment {
             }
         });
     }
+
+    private void initListeners() {
+        binding.tvLocation.setOnClickListener(view -> {
+            navController.navigate(R.id.cityFragment);
+        });
+
+    }
+
     private String getLiveTime(Integer timeInt, String timeFormat, String gmt){
         long time = timeInt * (long) 1000;
         Date date = new Date(time);
