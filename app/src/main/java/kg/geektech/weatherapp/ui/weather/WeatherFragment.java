@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -28,8 +27,6 @@ import java.util.TimeZone;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import kg.geektech.weatherapp.R;
-import kg.geektech.weatherapp.common.Resource;
-import kg.geektech.weatherapp.data.models.Weather;
 import kg.geektech.weatherapp.databinding.FragmentWeatherBinding;
 @AndroidEntryPoint
 public class WeatherFragment extends Fragment {
@@ -39,6 +36,7 @@ public class WeatherFragment extends Fragment {
     private NavHostFragment navHostFragment;
     private NavController navController;
     private WeatherFragmentArgs args;
+    private WeatherAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +47,7 @@ public class WeatherFragment extends Fragment {
         viewModel.getWeathers(city);
         navHostFragment  = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         navController = navHostFragment.getNavController();
+        adapter = new WeatherAdapter();
     }
 
     @Override
@@ -63,7 +62,13 @@ public class WeatherFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initListeners();
-        viewModel.liveData.observe(getViewLifecycleOwner(), resource -> {
+        initRecycler();
+        initMain();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void initMain() {
+        viewModel.liveData1.observe(getViewLifecycleOwner(), resource -> {
             switch (resource.status){
                 case SUCCESS:{
                     String location = resource.data.getName() + ", " + resource.data.getSys().getCountry();
@@ -94,11 +99,12 @@ public class WeatherFragment extends Fragment {
                     Glide.with(requireContext()).load(img).into(binding.ivSunny);
                     binding.tvDaytimeNum.setText(daytime);
 
+
                     Calendar c = Calendar.getInstance();
                     int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-                    if(timeOfDay >= 0 && timeOfDay < 12){
+                    if(timeOfDay >= 0 && timeOfDay < 17){
                         binding.ivStatus.setImageResource(R.drawable.img_day);
-                    }else if(timeOfDay >= 12 && timeOfDay < 24){
+                    }else if(timeOfDay >= 17 && timeOfDay < 24){
                         binding.ivStatus.setImageResource(R.drawable.img_night);
                     }
 
@@ -118,10 +124,36 @@ public class WeatherFragment extends Fragment {
     }
 
     private void initListeners() {
-        binding.tvLocation.setOnClickListener(view -> {
+        binding.ivCity.setOnClickListener(view -> {
             navController.navigate(R.id.cityFragment);
         });
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                requireActivity().finish();
+            }
+        });
+    }
 
+    private void initRecycler() {
+        binding.rvWeathers.setAdapter(adapter);
+        viewModel.liveData5.observe(getViewLifecycleOwner(), resource -> {
+            switch (resource.status){
+                case SUCCESS:{
+                    adapter.setWeathers(resource.data.getList());
+                    success();
+                    break;
+                }
+                case ERROR:{
+                    Toast.makeText(requireActivity(), "Couldn't load weather for 5 days", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                case LOADING:{
+                    loading();
+                    break;
+                }
+            }
+        });
     }
 
     private String getLiveTime(Integer timeInt, String timeFormat, String gmt){

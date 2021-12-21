@@ -1,10 +1,10 @@
 
-package kg.geektech.weatherapp.data.models;
+package kg.geektech.weatherapp.data.models.five_days;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Weather_1 {
+public class Weather_5 {
 
     @SerializedName("id")
     @Expose

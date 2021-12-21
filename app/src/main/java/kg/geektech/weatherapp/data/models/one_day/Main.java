@@ -1,5 +1,5 @@
 
-package kg.geektech.weatherapp.data.models;
+package kg.geektech.weatherapp.data.models.one_day;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
