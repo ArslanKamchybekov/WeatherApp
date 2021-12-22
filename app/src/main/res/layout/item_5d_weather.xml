@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="19sp"
+    android:layout_marginHorizontal="17sp"
     android:orientation="vertical"
     app:cardCornerRadius="10sp"
     app:cardElevation="8dp">
@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:fontFamily="@font/barlow_regular"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="35 C" />
 
@@ -57,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:fontFamily="@font/barlow_regular"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="26 C" />
 
