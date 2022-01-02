@@ -71,12 +71,12 @@ public abstract class AppModule {
     }
 
     @Provides
-    public static Weather_for_1 provideWeatherFor1Dao(AppDatabase appDatabase){
+    public static WeatherFor1Dao provideWeatherFor1Dao(AppDatabase appDatabase){
         return appDatabase.weather_for_1Dao();
     }
 
     @Provides
-    public static Weather_for_5 provideWeatherFor5Dao(AppDatabase appDatabase){
+    public static WeatherFor5Dao provideWeatherFor5Dao(AppDatabase appDatabase){
         return appDatabase.weather_for_5Dao();
     }
 }

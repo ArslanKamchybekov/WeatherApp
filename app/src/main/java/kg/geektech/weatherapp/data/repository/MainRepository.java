@@ -2,6 +2,8 @@ package kg.geektech.weatherapp.data.repository;
 
 import androidx.lifecycle.MutableLiveData;
 
+import javax.inject.Inject;
+
 import kg.geektech.weatherapp.common.Resource;
 import kg.geektech.weatherapp.data.models.five_days.Weather_for_5;
 import kg.geektech.weatherapp.data.models.one_day.Weather_for_1;
@@ -18,6 +20,7 @@ public class MainRepository {
     private WeatherFor1Dao weatherFor1Dao;
     private WeatherFor5Dao weatherFor5Dao;
 
+    @Inject
     public MainRepository(WeatherApi api, WeatherFor1Dao weatherFor1Dao, WeatherFor5Dao weatherFor5Dao) {
         this.api = api;
         this.weatherFor1Dao = weatherFor1Dao;

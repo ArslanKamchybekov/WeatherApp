@@ -21,8 +21,11 @@ import kg.geektech.weatherapp.databinding.Item5dWeatherBinding;
 
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHolder> {
 
-    private List<kg.geektech.weatherapp.data.models.five_days.List> weathers = new ArrayList<>();
+    private List<kg.geektech.weatherapp.data.models.five_days.List> weathers;
 
+    public WeatherAdapter() {
+        weathers = new ArrayList<>();
+    }
 
     public void setWeathers(List<kg.geektech.weatherapp.data.models.five_days.List> weathers) {
         this.weathers = weathers;
