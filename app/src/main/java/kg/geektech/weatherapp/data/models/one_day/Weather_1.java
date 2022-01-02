@@ -1,23 +1,15 @@
 
 package kg.geektech.weatherapp.data.models.one_day;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class Weather_1 {
 
-    @SerializedName("id")
-    @Expose
     private Integer id;
-    @SerializedName("main")
-    @Expose
     private String main;
-    @SerializedName("description")
-    @Expose
     private String description;
-    @SerializedName("icon")
-    @Expose
     private String icon;
+
+    public Weather_1() {
+    }
 
     public Integer getId() {
         return id;

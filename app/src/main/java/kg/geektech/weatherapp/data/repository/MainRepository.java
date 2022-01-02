@@ -6,6 +6,8 @@ import kg.geektech.weatherapp.common.Resource;
 import kg.geektech.weatherapp.data.models.five_days.Weather_for_5;
 import kg.geektech.weatherapp.data.models.one_day.Weather_for_1;
 import kg.geektech.weatherapp.data.remote.WeatherApi;
+import kg.geektech.weatherapp.data.room.WeatherFor1Dao;
+import kg.geektech.weatherapp.data.room.WeatherFor5Dao;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -13,9 +15,13 @@ import retrofit2.Response;
 public class MainRepository {
 
     private WeatherApi api;
+    private WeatherFor1Dao weatherFor1Dao;
+    private WeatherFor5Dao weatherFor5Dao;
 
-    public MainRepository(WeatherApi api) {
+    public MainRepository(WeatherApi api, WeatherFor1Dao weatherFor1Dao, WeatherFor5Dao weatherFor5Dao) {
         this.api = api;
+        this.weatherFor1Dao = weatherFor1Dao;
+        this.weatherFor5Dao = weatherFor5Dao;
     }
 
     public MutableLiveData<Resource<Weather_for_1>> getWeather1(String city){
@@ -26,6 +32,7 @@ public class MainRepository {
             public void onResponse(Call<Weather_for_1> call, Response<Weather_for_1> response) {
                 if (response.isSuccessful() && response.body() != null){
                     liveData.setValue(Resource.success(response.body()));
+                    weatherFor1Dao.insert(response.body());
                 }else {
                     liveData.setValue(Resource.error(null, response.message()));
                 }
@@ -46,6 +53,7 @@ public class MainRepository {
             public void onResponse(Call<Weather_for_5> call, Response<Weather_for_5> response) {
                 if (response.isSuccessful() && response.body() != null){
                     liveData.setValue(Resource.success(response.body()));
+                    weatherFor5Dao.insert(response.body());
                 }else {
                     liveData.setValue(Resource.error(null, response.message()));
                 }

@@ -1,14 +1,12 @@
 
 package kg.geektech.weatherapp.data.models.five_days;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class Sys {
 
-    @SerializedName("pod")
-    @Expose
     private String pod;
+
+    public Sys() {
+    }
 
     public String getPod() {
         return pod;

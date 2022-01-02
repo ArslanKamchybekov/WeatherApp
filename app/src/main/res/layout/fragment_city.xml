@@ -31,28 +31,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30sp"
-            android:layout_marginBottom="30sp"
             android:hint="Enter the city :"
             android:textColorHint="@color/white" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="24dp"
+            android:text="─────────────────────────────"
+            android:textAlignment="center"
+            android:textColor="@color/black" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_get_weather"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="30sp"
+            android:layout_marginHorizontal="40sp"
             android:backgroundTint="@color/black"
             android:drawableRight="@drawable/ic_get_weather"
             android:fontFamily="@font/barlow_regular"
             android:padding="16dp"
             android:text="get weather"
-            app:cornerRadius="10sp"
-            android:layout_marginBottom="40sp"/>
+            app:cornerRadius="10sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <ImageView
-        android:layout_width="900dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_wave"/>
 
 </LinearLayout>

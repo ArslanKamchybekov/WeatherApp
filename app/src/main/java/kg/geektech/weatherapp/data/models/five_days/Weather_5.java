@@ -6,18 +6,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class Weather_5 {
 
-    @SerializedName("id")
-    @Expose
     private Integer id;
-    @SerializedName("main")
-    @Expose
     private String main;
-    @SerializedName("description")
-    @Expose
     private String description;
-    @SerializedName("icon")
-    @Expose
     private String icon;
+
+    public Weather_5() {
+    }
 
     public Integer getId() {
         return id;

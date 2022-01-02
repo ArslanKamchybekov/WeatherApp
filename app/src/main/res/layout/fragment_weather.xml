@@ -354,6 +354,7 @@
                 android:id="@+id/n7"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_marginBottom="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/n8"
                 app:layout_constraintStart_toStartOf="parent"
@@ -400,6 +401,7 @@
                 android:id="@+id/n8"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_marginBottom="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/n9"
                 app:layout_constraintStart_toEndOf="@id/n7"
@@ -447,6 +449,7 @@
                 android:id="@+id/n9"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_marginBottom="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/n8"
@@ -493,11 +496,11 @@
                 android:id="@+id/rv_weathers"
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
+                android:layout_marginTop="60dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/n6"
-                android:layout_marginTop="60dp"
                 tools:listitem="@layout/item_5d_weather" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

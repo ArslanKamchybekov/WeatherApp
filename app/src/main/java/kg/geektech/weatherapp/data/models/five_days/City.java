@@ -1,35 +1,27 @@
 
 package kg.geektech.weatherapp.data.models.five_days;
 
+import androidx.room.TypeConverters;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import kg.geektech.weatherapp.data.room.converting.WeatherFor5.CoordCon;
+
 public class City {
 
-    @SerializedName("id")
-    @Expose
     private Integer id;
-    @SerializedName("name")
-    @Expose
     private String name;
-    @SerializedName("coord")
-    @Expose
+    @TypeConverters({CoordCon.class})
     private Coord coord;
-    @SerializedName("country")
-    @Expose
     private String country;
-    @SerializedName("population")
-    @Expose
     private Integer population;
-    @SerializedName("timezone")
-    @Expose
     private Integer timezone;
-    @SerializedName("sunrise")
-    @Expose
     private Integer sunrise;
-    @SerializedName("sunset")
-    @Expose
     private Integer sunset;
+
+    public City() {
+    }
 
     public Integer getId() {
         return id;
@@ -94,5 +86,6 @@ public class City {
     public void setSunset(Integer sunset) {
         this.sunset = sunset;
     }
+
 
 }

@@ -1,20 +1,14 @@
 
 package kg.geektech.weatherapp.data.models.five_days;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class Wind {
 
-    @SerializedName("speed")
-    @Expose
     private Double speed;
-    @SerializedName("deg")
-    @Expose
     private Integer deg;
-    @SerializedName("gust")
-    @Expose
     private Double gust;
+
+    public Wind() {
+    }
 
     public Double getSpeed() {
         return speed;

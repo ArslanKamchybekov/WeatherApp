@@ -1,17 +1,14 @@
 
 package kg.geektech.weatherapp.data.models.one_day;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class Wind {
 
-    @SerializedName("speed")
-    @Expose
     private Double speed;
-    @SerializedName("deg")
-    @Expose
     private Integer deg;
+    private Double gust;
+
+    public Wind() {
+    }
 
     public Double getSpeed() {
         return speed;
@@ -27,6 +24,14 @@ public class Wind {
 
     public void setDeg(Integer deg) {
         this.deg = deg;
+    }
+
+    public Double getGust() {
+        return gust;
+    }
+
+    public void setGust(Double gust) {
+        this.gust = gust;
     }
 
 }

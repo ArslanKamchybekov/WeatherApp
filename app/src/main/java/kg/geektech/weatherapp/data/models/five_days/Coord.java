@@ -1,17 +1,13 @@
 
 package kg.geektech.weatherapp.data.models.five_days;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class Coord {
 
-    @SerializedName("lat")
-    @Expose
     private Double lat;
-    @SerializedName("lon")
-    @Expose
     private Double lon;
+
+    public Coord() {
+    }
 
     public Double getLat() {
         return lat;

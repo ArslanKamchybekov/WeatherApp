@@ -54,14 +54,14 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
             this.binding = binding;
         }
 
-        public void onBind(kg.geektech.weatherapp.data.models.five_days.List weather) {
-            String icon = "https://openweathermap.org/img/wn/" + weather.getWeather().get(0).getIcon() + "@2x.png";
+        public void onBind(kg.geektech.weatherapp.data.models.five_days.List weathers) {
+            String icon = "https://openweathermap.org/img/wn/" + weathers.getWeather5List().get(0).getIcon() + "@2x.png";
             Glide.with(binding.getRoot()).load(icon).centerCrop().into(binding.ivDay);
-            String date = getLiveTime(weather.getDt(), "EEE, dd", "GMT+6");
+            String date = getLiveTime(weathers.getDt(), "EEE, dd", "GMT+6");
             binding.tvWeekDay.setText(date);
-            String maxTemp = weather.getMain().getTempMax() + "°C";
+            String maxTemp = weathers.getMain().getTempMax() + "°C";
             binding.tvDayMax.setText(maxTemp);
-            String minTemp = weather.getMain().getTempMin() + "°C";
+            String minTemp = weathers.getMain().getTempMin() + "°C";
             binding.tvDayMin.setText(minTemp);
         }
 

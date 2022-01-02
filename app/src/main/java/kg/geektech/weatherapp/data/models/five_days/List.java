@@ -1,41 +1,36 @@
 
 package kg.geektech.weatherapp.data.models.five_days;
 
-import com.google.gson.annotations.Expose;
+import androidx.room.TypeConverters;
+
 import com.google.gson.annotations.SerializedName;
+
+import kg.geektech.weatherapp.data.room.converting.WeatherFor5.CloudsCon;
+import kg.geektech.weatherapp.data.room.converting.WeatherFor5.MainCon;
+import kg.geektech.weatherapp.data.room.converting.WeatherFor5.SysCon;
+import kg.geektech.weatherapp.data.room.converting.WeatherFor5.Weather_5Con;
+import kg.geektech.weatherapp.data.room.converting.WeatherFor5.WindCon;
 
 public class List {
 
-    @SerializedName("dt")
-    @Expose
     private Integer dt;
-    @SerializedName("main")
-    @Expose
+    @TypeConverters({MainCon.class})
     private Main main;
-    @SerializedName("weather")
-    @Expose
-    private java.util.List<Weather_5> weather = null;
-    @SerializedName("clouds")
-    @Expose
+    @TypeConverters({Weather_5Con.class})
+    private java.util.List<Weather_5> weather5List = null;
+    @TypeConverters({CloudsCon.class})
     private Clouds clouds;
-    @SerializedName("wind")
-    @Expose
+    @TypeConverters({WindCon.class})
     private Wind wind;
-    @SerializedName("visibility")
-    @Expose
     private Integer visibility;
-    @SerializedName("pop")
-    @Expose
     private Double pop;
-    @SerializedName("sys")
-    @Expose
+    @TypeConverters({SysCon.class})
     private Sys sys;
     @SerializedName("dt_txt")
-    @Expose
     private String dtTxt;
-    @SerializedName("rain")
-    @Expose
-    private Rain rain;
+
+    public List() {
+    }
 
     public Integer getDt() {
         return dt;
@@ -53,12 +48,12 @@ public class List {
         this.main = main;
     }
 
-    public java.util.List<Weather_5> getWeather() {
-        return weather;
+    public java.util.List<Weather_5> getWeather5List() {
+        return weather5List;
     }
 
-    public void setWeather(java.util.List<Weather_5> weather) {
-        this.weather = weather;
+    public void setWeather5List(java.util.List<Weather_5> weather5List) {
+        this.weather5List = weather5List;
     }
 
     public Clouds getClouds() {
@@ -107,14 +102,6 @@ public class List {
 
     public void setDtTxt(String dtTxt) {
         this.dtTxt = dtTxt;
-    }
-
-    public Rain getRain() {
-        return rain;
-    }
-
-    public void setRain(Rain rain) {
-        this.rain = rain;
     }
 
 }
