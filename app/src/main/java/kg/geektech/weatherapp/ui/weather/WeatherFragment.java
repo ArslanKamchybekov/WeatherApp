@@ -1,6 +1,7 @@
 package kg.geektech.weatherapp.ui.weather;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -71,6 +72,7 @@ public class WeatherFragment extends Fragment implements LocationListener   {
         locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
         ActivityCompat.requestPermissions(requireActivity(), PERMS, 1);
         getData();
+        getLocInfo();
     }
 
     @Override
@@ -187,6 +189,7 @@ public class WeatherFragment extends Fragment implements LocationListener   {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initAllData() {
         viewModel.liveData1.observe(getViewLifecycleOwner(), resource -> {
