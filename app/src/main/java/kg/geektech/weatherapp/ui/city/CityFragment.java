@@ -1,37 +1,32 @@
 package kg.geektech.weatherapp.ui.city;
 
-import android.icu.util.Calendar;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.Navigation;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import kg.geektech.weatherapp.R;
 import kg.geektech.weatherapp.databinding.FragmentCityBinding;
 
 @AndroidEntryPoint
-public class CityFragment extends Fragment {
+public class CityFragment extends Fragment implements OnMapReadyCallback {
 
     private FragmentCityBinding binding;
-    private NavHostFragment navHostFragment;
-    private NavController navController;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        navController = navHostFragment.getNavController();
-    }
+    private GoogleMap map;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,35 +35,40 @@ public class CityFragment extends Fragment {
         return binding.getRoot();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initListeners();
-        initAnim();
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void initAnim() {
-        Calendar c = Calendar.getInstance();
-        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-        if (timeOfDay >= 0 && timeOfDay < 11) {
-            binding.animationView.setAnimation(R.raw.morning);
-        } else if (timeOfDay >= 11 && timeOfDay < 17) {
-            binding.animationView.setAnimation(R.raw.day);
-        } else if (timeOfDay >= 17 && timeOfDay < 24) {
-            binding.animationView.setAnimation(R.raw.night);
-        }
-    }
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        map = googleMap;
 
-    private void initListeners() {
-        binding.btnGetWeather.setOnClickListener(v -> {
-            if (binding.etCity.getText().toString().isEmpty()) {
-                Toast.makeText(requireContext(), "Enter the city please", Toast.LENGTH_SHORT).show();
-            } else {
-                String city = binding.etCity.getText().toString();
-                navController.navigate(CityFragmentDirections.actionCityFragmentToWeatherFragment(city));
-            }
+        map.setOnMapClickListener(latLng -> {
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            map.clear();
+            map.addMarker(markerOptions);
+            map.animateCamera(CameraUpdateFactory.newCameraPosition(
+                    CameraPosition.builder()
+                            .zoom(8f)
+                            .target(latLng)
+                            .bearing(90f)
+                            .tilt(40f)
+                            .build()
+            ));
+            map.setOnMarkerClickListener(marker -> {
+                double lat = latLng.latitude;
+                double lon = latLng.longitude;
+                Bundle bundle = new Bundle();
+                bundle.putDouble("key1", lat);
+                bundle.putDouble("key2", lon);
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+                navController.navigate(R.id.weatherFragment, bundle);
+                return false;
+            });
         });
     }
 }

@@ -27,16 +27,16 @@ public class MainRepository {
         this.weatherFor5Dao = weatherFor5Dao;
     }
 
-    public MutableLiveData<Resource<Weather_for_1>> getWeather1(String city){
+    public MutableLiveData<Resource<Weather_for_1>> getWeather1(Double lat, Double lon) {
         MutableLiveData<Resource<Weather_for_1>> liveData = new MutableLiveData<>();
         liveData.setValue(Resource.loading());
-        api.getWeather1(city, "f5dda35d65d096bd3824576f46d99487", "metric").enqueue(new Callback<Weather_for_1>() {
+        api.getWeather1(lat, lon, "f5dda35d65d096bd3824576f46d99487", "metric").enqueue(new Callback<Weather_for_1>() {
             @Override
             public void onResponse(Call<Weather_for_1> call, Response<Weather_for_1> response) {
-                if (response.isSuccessful() && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
                     liveData.setValue(Resource.success(response.body()));
                     weatherFor1Dao.insert(response.body());
-                }else {
+                } else {
                     liveData.setValue(Resource.error(null, response.message()));
                 }
             }
@@ -48,16 +48,17 @@ public class MainRepository {
         });
         return liveData;
     }
-    public MutableLiveData<Resource<Weather_for_5>> getWeather5(String city){
+
+    public MutableLiveData<Resource<Weather_for_5>> getWeather5(Double lat, Double lon) {
         MutableLiveData<Resource<Weather_for_5>> liveData = new MutableLiveData<>();
         liveData.setValue(Resource.loading());
-        api.getWeather5(city, "f5dda35d65d096bd3824576f46d99487", "metric").enqueue(new Callback<Weather_for_5>() {
+        api.getWeather5(lat, lon, "f5dda35d65d096bd3824576f46d99487", "metric").enqueue(new Callback<Weather_for_5>() {
             @Override
             public void onResponse(Call<Weather_for_5> call, Response<Weather_for_5> response) {
-                if (response.isSuccessful() && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
                     liveData.setValue(Resource.success(response.body()));
                     weatherFor5Dao.insert(response.body());
-                }else {
+                } else {
                     liveData.setValue(Resource.error(null, response.message()));
                 }
             }

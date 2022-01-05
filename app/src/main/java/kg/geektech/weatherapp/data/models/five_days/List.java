@@ -17,7 +17,7 @@ public class List {
     @TypeConverters({MainCon.class})
     private Main main;
     @TypeConverters({Weather_5Con.class})
-    private java.util.List<Weather_5> weather5List = null;
+    private java.util.List<Weather_5> weather = null;
     @TypeConverters({CloudsCon.class})
     private Clouds clouds;
     @TypeConverters({WindCon.class})
@@ -48,14 +48,13 @@ public class List {
         this.main = main;
     }
 
-    public java.util.List<Weather_5> getWeather5List() {
-        return weather5List;
+    public java.util.List<Weather_5> getWeathers() {
+        return weather;
     }
 
-    public void setWeather5List(java.util.List<Weather_5> weather5List) {
-        this.weather5List = weather5List;
+    public void setWeathers(java.util.List<Weather_5> weathers) {
+        this.weather = weathers;
     }
-
     public Clouds getClouds() {
         return clouds;
     }

@@ -26,6 +26,7 @@ import kg.geektech.weatherapp.data.room.converting.WeatherFor5.Weather_5Con;
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract WeatherFor1Dao weather_for_1Dao();
+
     public abstract WeatherFor5Dao weather_for_5Dao();
 
 }

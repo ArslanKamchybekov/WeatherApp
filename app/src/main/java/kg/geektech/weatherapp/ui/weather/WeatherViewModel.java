@@ -23,8 +23,8 @@ public class WeatherViewModel extends ViewModel {
         this.repository = repository;
     }
 
-    public void getWeathers(String city){
-        liveData1 = repository.getWeather1(city);
-        liveData5 = repository.getWeather5(city);
+    public void getWeathers(Double lat, Double lon){
+        liveData1 = repository.getWeather1(lat, lon);
+        liveData5 = repository.getWeather5(lat, lon);
     }
 }

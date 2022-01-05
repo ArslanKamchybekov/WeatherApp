@@ -29,17 +29,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public abstract class AppModule {
 
     @Provides
-    public static MainRepository provideMainRepository(WeatherApi api, WeatherFor1Dao weatherFor1Dao, WeatherFor5Dao weatherFor5Dao){
+    public static MainRepository provideMainRepository(WeatherApi api, WeatherFor1Dao weatherFor1Dao, WeatherFor5Dao weatherFor5Dao) {
         return new MainRepository(api, weatherFor1Dao, weatherFor5Dao);
     }
 
     @Provides
-    public static WeatherApi provideApi(Retrofit retrofit){
+    public static WeatherApi provideApi(Retrofit retrofit) {
         return retrofit.create(WeatherApi.class);
     }
 
     @Provides
-    public static OkHttpClient provideOkHttpClient(Interceptor loggingInterceptor){
+    public static OkHttpClient provideOkHttpClient(Interceptor loggingInterceptor) {
         return new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
@@ -49,13 +49,13 @@ public abstract class AppModule {
     }
 
     @Provides
-    public static Interceptor provideLoggingInterceptor(){
+    public static Interceptor provideLoggingInterceptor() {
         return new HttpLoggingInterceptor()
                 .setLevel(HttpLoggingInterceptor.Level.BODY);
     }
 
     @Provides
-    public static Retrofit provideRetrofit(OkHttpClient client){
+    public static Retrofit provideRetrofit(OkHttpClient client) {
         return new Retrofit.Builder()
                 .baseUrl("https://api.openweathermap.org/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -64,19 +64,19 @@ public abstract class AppModule {
     }
 
     @Provides
-    public static AppDatabase provideAppDatabase(@ApplicationContext Context context){
+    public static AppDatabase provideAppDatabase(@ApplicationContext Context context) {
         return Room.databaseBuilder(context, AppDatabase.class, "database")
                 .allowMainThreadQueries()
                 .build();
     }
 
     @Provides
-    public static WeatherFor1Dao provideWeatherFor1Dao(AppDatabase appDatabase){
+    public static WeatherFor1Dao provideWeatherFor1Dao(AppDatabase appDatabase) {
         return appDatabase.weather_for_1Dao();
     }
 
     @Provides
-    public static WeatherFor5Dao provideWeatherFor5Dao(AppDatabase appDatabase){
+    public static WeatherFor5Dao provideWeatherFor5Dao(AppDatabase appDatabase) {
         return appDatabase.weather_for_5Dao();
     }
 }

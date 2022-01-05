@@ -14,39 +14,36 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import kg.geektech.weatherapp.common.Resource;
-import kg.geektech.weatherapp.data.models.five_days.Weather_for_5;
-import kg.geektech.weatherapp.data.models.one_day.Weather_for_1;
 import kg.geektech.weatherapp.databinding.Item5dWeatherBinding;
 
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHolder> {
 
-    private List<kg.geektech.weatherapp.data.models.five_days.List> weathers;
+    private List<kg.geektech.weatherapp.data.models.five_days.List> list;
 
     public WeatherAdapter() {
-        weathers = new ArrayList<>();
+        list = new ArrayList<>();
     }
 
-    public void setWeathers(List<kg.geektech.weatherapp.data.models.five_days.List> weathers) {
-        this.weathers = weathers;
+    public void setList(List<kg.geektech.weatherapp.data.models.five_days.List> list) {
+        this.list = list;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Item5dWeatherBinding binding = Item5dWeatherBinding.inflate(LayoutInflater.from(parent.getContext()),parent, false);
+        Item5dWeatherBinding binding = Item5dWeatherBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.onBind(weathers.get(position));
+        holder.onBind(list.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return weathers.size();
+        return list.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -57,18 +54,18 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
             this.binding = binding;
         }
 
-        public void onBind(kg.geektech.weatherapp.data.models.five_days.List weathers) {
-            String icon = "https://openweathermap.org/img/wn/" + weathers.getWeather5List().get(0).getIcon() + "@2x.png";
+        public void onBind(kg.geektech.weatherapp.data.models.five_days.List list) {
+            String icon = "https://openweathermap.org/img/wn/" + list.getWeathers().get(0).getIcon() + "@2x.png";
             Glide.with(binding.getRoot()).load(icon).centerCrop().into(binding.ivDay);
-            String date = getLiveTime(weathers.getDt(), "EEE, dd", "GMT+6");
+            String date = getLiveTime(list.getDt(), "EEE, dd | HH:mm", "GMT+6");
             binding.tvWeekDay.setText(date);
-            String maxTemp = weathers.getMain().getTempMax() + "°C";
+            String maxTemp = list.getMain().getTempMax() + "°C";
             binding.tvDayMax.setText(maxTemp);
-            String minTemp = weathers.getMain().getTempMin() + "°C";
+            String minTemp = list.getMain().getTempMin() + "°C";
             binding.tvDayMin.setText(minTemp);
         }
 
-        private String getLiveTime(Integer timeInt, String timeFormat, String gmt){
+        private String getLiveTime(Integer timeInt, String timeFormat, String gmt) {
             long time = timeInt * (long) 1000;
             Date date = new Date(time);
             SimpleDateFormat format = new SimpleDateFormat(timeFormat);
