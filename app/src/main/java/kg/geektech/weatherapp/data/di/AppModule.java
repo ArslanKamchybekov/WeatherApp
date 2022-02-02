@@ -11,8 +11,6 @@ import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
-import kg.geektech.weatherapp.data.models.five_days.Weather_for_5;
-import kg.geektech.weatherapp.data.models.one_day.Weather_for_1;
 import kg.geektech.weatherapp.data.remote.WeatherApi;
 import kg.geektech.weatherapp.data.repository.MainRepository;
 import kg.geektech.weatherapp.data.room.AppDatabase;

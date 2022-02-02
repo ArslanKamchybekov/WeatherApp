@@ -1,5 +1,6 @@
 package kg.geektech.weatherapp.ui.weather;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -24,6 +25,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
         list = new ArrayList<>();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setList(List<kg.geektech.weatherapp.data.models.five_days.List> list) {
         this.list = list;
         notifyDataSetChanged();
@@ -46,8 +48,8 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
         return list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private Item5dWeatherBinding binding;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final Item5dWeatherBinding binding;
 
         public ViewHolder(@NonNull Item5dWeatherBinding binding) {
             super(binding.getRoot());
@@ -68,7 +70,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
         private String getLiveTime(Integer timeInt, String timeFormat, String gmt) {
             long time = timeInt * (long) 1000;
             Date date = new Date(time);
-            SimpleDateFormat format = new SimpleDateFormat(timeFormat);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(timeFormat);
             format.setTimeZone(TimeZone.getTimeZone(gmt));
             return format.format(date);
         }

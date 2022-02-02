@@ -1,5 +1,6 @@
 package kg.geektech.weatherapp.data.repository;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import javax.inject.Inject;
@@ -16,9 +17,9 @@ import retrofit2.Response;
 
 public class MainRepository {
 
-    private WeatherApi api;
-    private WeatherFor1Dao weatherFor1Dao;
-    private WeatherFor5Dao weatherFor5Dao;
+    private final WeatherApi api;
+    private final WeatherFor1Dao weatherFor1Dao;
+    private final WeatherFor5Dao weatherFor5Dao;
 
     @Inject
     public MainRepository(WeatherApi api, WeatherFor1Dao weatherFor1Dao, WeatherFor5Dao weatherFor5Dao) {
@@ -27,12 +28,12 @@ public class MainRepository {
         this.weatherFor5Dao = weatherFor5Dao;
     }
 
-    public MutableLiveData<Resource<Weather_for_1>> getWeather1(Double lat, Double lon) {
+    public MutableLiveData<Resource<Weather_for_1>> getWeather1(String cityName, Double lat, Double lon) {
         MutableLiveData<Resource<Weather_for_1>> liveData = new MutableLiveData<>();
         liveData.setValue(Resource.loading());
-        api.getWeather1(lat, lon, "f5dda35d65d096bd3824576f46d99487", "metric").enqueue(new Callback<Weather_for_1>() {
+        api.getWeather1(cityName, lat, lon, "f5dda35d65d096bd3824576f46d99487", "metric").enqueue(new Callback<Weather_for_1>() {
             @Override
-            public void onResponse(Call<Weather_for_1> call, Response<Weather_for_1> response) {
+            public void onResponse(@NonNull Call<Weather_for_1> call, @NonNull Response<Weather_for_1> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     liveData.setValue(Resource.success(response.body()));
                     weatherFor1Dao.insert(response.body());
@@ -42,19 +43,19 @@ public class MainRepository {
             }
 
             @Override
-            public void onFailure(Call<Weather_for_1> call, Throwable t) {
+            public void onFailure(@NonNull Call<Weather_for_1> call, @NonNull Throwable t) {
                 liveData.setValue(Resource.error(null, t.getLocalizedMessage()));
             }
         });
         return liveData;
     }
 
-    public MutableLiveData<Resource<Weather_for_5>> getWeather5(Double lat, Double lon) {
+    public MutableLiveData<Resource<Weather_for_5>> getWeather5(String cityName, Double lat, Double lon) {
         MutableLiveData<Resource<Weather_for_5>> liveData = new MutableLiveData<>();
         liveData.setValue(Resource.loading());
-        api.getWeather5(lat, lon, "f5dda35d65d096bd3824576f46d99487", "metric").enqueue(new Callback<Weather_for_5>() {
+        api.getWeather5(cityName, lat, lon, "f5dda35d65d096bd3824576f46d99487", "metric").enqueue(new Callback<Weather_for_5>() {
             @Override
-            public void onResponse(Call<Weather_for_5> call, Response<Weather_for_5> response) {
+            public void onResponse(@NonNull Call<Weather_for_5> call, @NonNull Response<Weather_for_5> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     liveData.setValue(Resource.success(response.body()));
                     weatherFor5Dao.insert(response.body());
@@ -64,7 +65,7 @@ public class MainRepository {
             }
 
             @Override
-            public void onFailure(Call<Weather_for_5> call, Throwable t) {
+            public void onFailure(@NonNull Call<Weather_for_5> call, @NonNull Throwable t) {
                 liveData.setValue(Resource.error(null, t.getLocalizedMessage()));
             }
         });

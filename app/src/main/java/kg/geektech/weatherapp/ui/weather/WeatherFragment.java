@@ -20,6 +20,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -48,7 +49,7 @@ import kg.geektech.weatherapp.data.room.WeatherFor5Dao;
 import kg.geektech.weatherapp.databinding.FragmentWeatherBinding;
 
 @AndroidEntryPoint
-public class WeatherFragment extends Fragment implements LocationListener   {
+public class WeatherFragment extends Fragment implements LocationListener {
 
     private FragmentWeatherBinding binding;
     private WeatherViewModel viewModel;
@@ -72,11 +73,11 @@ public class WeatherFragment extends Fragment implements LocationListener   {
         locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
         ActivityCompat.requestPermissions(requireActivity(), PERMS, 1);
         getData();
-        getLocInfo();
+        getLocData();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentWeatherBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -91,11 +92,12 @@ public class WeatherFragment extends Fragment implements LocationListener   {
     }
 
     private void getData() {
-        if (getArguments() != null){
+        if (getArguments() != null) {
             Bundle bundle = getArguments();
+            String cityName = bundle.getString("keyName");
             Double lat = bundle.getDouble("key1");
             Double lon = bundle.getDouble("key2");
-            viewModel.getWeathers(lat, lon);
+            viewModel.getWeathers(cityName, lat, lon);
         }
     }
 
@@ -104,14 +106,14 @@ public class WeatherFragment extends Fragment implements LocationListener   {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                getLocInfo();
+                getLocData();
             } else {
                 ActivityCompat.requestPermissions(requireActivity(), PERMS, 1);
             }
         }
     }
 
-    private void getLocInfo() {
+    private void getLocData() {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(
@@ -124,7 +126,7 @@ public class WeatherFragment extends Fragment implements LocationListener   {
     @Override
     public void onLocationChanged(@NonNull Location location) {
         if (getArguments() == null) {
-            viewModel.getWeathers(location.getLatitude(), location.getLongitude());
+            viewModel.getWeathers(null, location.getLatitude(), location.getLongitude());
             broadcastReceiver();
         }
     }
@@ -135,12 +137,12 @@ public class WeatherFragment extends Fragment implements LocationListener   {
             @Override
             public void onReceive(Context context, Intent intent) {
                 try {
-                    if (isOnline(context)){
-                        toast(true);
-                    }else {
-                        toast(false);
+                    if (isOnline(context)) {
+                        checkWIFI(true);
+                    } else {
+                        checkWIFI(false);
                     }
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
             }
@@ -149,18 +151,34 @@ public class WeatherFragment extends Fragment implements LocationListener   {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void toast(boolean checker) {
+    private void checkWIFI(boolean b) {
         binding.rvWeathers.setAdapter(adapter);
-        if (checker) {
-            Toast.makeText(requireContext(), "Successfully found weather!", Toast.LENGTH_SHORT).show();
+        if (b) {
+            checkGPS();
             initAllData();
         } else {
             Toast.makeText(requireContext(), "No internet connection...", Toast.LENGTH_SHORT).show();
+            error();
             adapter.setList(weatherFor5Dao.getWeatherFor5().getList());
-            setInfo(weatherFor1Dao.getWeatherFor1());
+            setData(weatherFor1Dao.getWeatherFor1());
         }
     }
 
+    private void checkGPS() {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            alertGPS();
+        }
+    }
+
+    private void alertGPS() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", (dialogInterface, i) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                .setNegativeButton("No", (dialogInterface, i) -> dialogInterface.cancel());
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
 
     private boolean isOnline(Context context) {
         try {
@@ -173,39 +191,22 @@ public class WeatherFragment extends Fragment implements LocationListener   {
         }
     }
 
-    private void unRegisterNetwork() {
-        try {
-            requireActivity().unregisterReceiver(receiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-        unRegisterNetwork();
-    }
-
-
-    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initAllData() {
         viewModel.liveData1.observe(getViewLifecycleOwner(), resource -> {
             switch (resource.status) {
                 case SUCCESS: {
-                    setInfo(resource.data);
+                    setData(resource.data);
                     success();
                     break;
                 }
                 case ERROR: {
                     Toast.makeText(requireContext(), "Couldn't load current weather", Toast.LENGTH_SHORT).show();
-                    binding.tvLocation.setText("Try again");
+                    error();
                     break;
                 }
                 case LOADING: {
-                    //loading();
+                    loading();
                     break;
                 }
             }
@@ -219,10 +220,11 @@ public class WeatherFragment extends Fragment implements LocationListener   {
                 }
                 case ERROR: {
                     Toast.makeText(requireActivity(), "Couldn't load weather for 5 days", Toast.LENGTH_SHORT).show();
+                    error();
                     break;
                 }
                 case LOADING: {
-                    //loading();
+                    loading();
                     break;
                 }
             }
@@ -230,7 +232,7 @@ public class WeatherFragment extends Fragment implements LocationListener   {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void setInfo(Weather_for_1 weather_for_1) {
+    private void setData(Weather_for_1 weather_for_1) {
         String location = weather_for_1.getName() + ", " + weather_for_1.getSys().getCountry();
         binding.tvLocation.setText(location);
         String temp = new DecimalFormat("0").format(weather_for_1.getMain().getTemp());
@@ -284,6 +286,11 @@ public class WeatherFragment extends Fragment implements LocationListener   {
         binding.ivLoc.setVisibility(View.VISIBLE);
     }
 
+    @SuppressLint("SetTextI18n")
+    private void error() {
+        binding.tvLocation.setText("Try again");
+    }
+
     private void loading() {
         binding.progress.setVisibility(View.VISIBLE);
         binding.n1.setVisibility(View.GONE);
@@ -302,7 +309,7 @@ public class WeatherFragment extends Fragment implements LocationListener   {
 
     private void initListeners() {
         binding.ivCity.setOnClickListener(view -> {
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
             navController.navigate(R.id.cityFragment);
         });
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
@@ -316,8 +323,23 @@ public class WeatherFragment extends Fragment implements LocationListener   {
     private String getLiveTime(Integer timeInt, String timeFormat, String gmt) {
         long time = timeInt * (long) 1000;
         Date date = new Date(time);
-        SimpleDateFormat format = new SimpleDateFormat(timeFormat);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(timeFormat);
         format.setTimeZone(TimeZone.getTimeZone(gmt));
         return format.format(date);
+    }
+
+    private void unRegisterNetwork() {
+        try {
+            requireActivity().unregisterReceiver(receiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        unRegisterNetwork();
     }
 }

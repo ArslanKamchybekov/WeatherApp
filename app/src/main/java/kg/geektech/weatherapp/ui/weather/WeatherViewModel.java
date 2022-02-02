@@ -16,15 +16,15 @@ public class WeatherViewModel extends ViewModel {
 
     public LiveData<Resource<Weather_for_1>> liveData1;
     public LiveData<Resource<Weather_for_5>> liveData5;
-    private MainRepository repository;
+    private final MainRepository repository;
 
     @Inject
-    public WeatherViewModel(MainRepository repository){
+    public WeatherViewModel(MainRepository repository) {
         this.repository = repository;
     }
 
-    public void getWeathers(Double lat, Double lon){
-        liveData1 = repository.getWeather1(lat, lon);
-        liveData5 = repository.getWeather5(lat, lon);
+    public void getWeathers(String cityName, Double lat, Double lon) {
+        liveData1 = repository.getWeather1(cityName, lat, lon);
+        liveData5 = repository.getWeather5(cityName, lat, lon);
     }
 }

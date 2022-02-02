@@ -4,10 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Projects/WeatherApp/app/src/main/res/drawable/ic_get_weather.xml" value="0.2703125" />
+        <entry key="..\:/Projects/WeatherApp/app/src/main/res/drawable/round.xml" value="0.25833333333333336" />
+        <entry key="..\:/Projects/WeatherApp/app/src/main/res/drawable/tab_indicator_default.xml" value="0.2703125" />
+        <entry key="..\:/Projects/WeatherApp/app/src/main/res/drawable/tab_indicator_selected.xml" value="0.2703125" />
+        <entry key="..\:/Projects/WeatherApp/app/src/main/res/drawable/tab_selector.xml" value="0.2703125" />
         <entry key="..\:/Projects/WeatherApp/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Projects/WeatherApp/app/src/main/res/layout/fragment_city.xml" value="0.25416666666666665" />
-        <entry key="..\:/Projects/WeatherApp/app/src/main/res/layout/fragment_weather.xml" value="0.24010416666666667" />
+        <entry key="..\:/Projects/WeatherApp/app/src/main/res/layout/fragment_dashboard.xml" value="0.25416666666666665" />
+        <entry key="..\:/Projects/WeatherApp/app/src/main/res/layout/fragment_onboard.xml" value="0.25416666666666665" />
+        <entry key="..\:/Projects/WeatherApp/app/src/main/res/layout/fragment_weather.xml" value="0.264" />
         <entry key="..\:/Projects/WeatherApp/app/src/main/res/layout/item_5d_weather.xml" value="0.25416666666666665" />
+        <entry key="..\:/Projects/WeatherApp/app/src/main/res/layout/list_board.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>

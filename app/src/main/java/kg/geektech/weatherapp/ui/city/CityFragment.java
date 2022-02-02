@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +30,7 @@ public class CityFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap map;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentCityBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -39,7 +40,23 @@ public class CityFragment extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
+        initListeners();
+    }
+
+    private void initListeners() {
+        binding.btnFind.setOnClickListener(view -> {
+            if (binding.editText.getText().toString().isEmpty()) {
+                Toast.makeText(requireContext(), "Enter the city!", Toast.LENGTH_SHORT).show();
+            } else {
+                String cityName = binding.editText.getText().toString();
+                Bundle bundle = new Bundle();
+                bundle.putString("keyName", cityName);
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+                navController.navigate(R.id.weatherFragment, bundle);
+            }
+        });
     }
 
     @Override
@@ -65,7 +82,7 @@ public class CityFragment extends Fragment implements OnMapReadyCallback {
                 Bundle bundle = new Bundle();
                 bundle.putDouble("key1", lat);
                 bundle.putDouble("key2", lon);
-                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
                 navController.navigate(R.id.weatherFragment, bundle);
                 return false;
             });

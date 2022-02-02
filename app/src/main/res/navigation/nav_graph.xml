@@ -18,5 +18,10 @@
         android:label="fragment_city"
         tools:layout="@layout/fragment_city" >
     </fragment>
+    <fragment
+        android:id="@+id/onBoardFragment"
+        android:name="kg.geektech.weatherapp.ui.onBoard.OnBoardFragment"
+        android:label="fragment_onboard"
+        tools:layout="@layout/fragment_onboard" />
 
 </navigation>
